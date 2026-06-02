@@ -1,13 +1,49 @@
+
+import React, { useEffect, useState } from "react";
 import { LOGO } from "../assets/assets";
 
 export default function Navbar({
-  scrolled,
   menuOpen,
   setMenuOpen,
   activeNav,
   scrollTo,
   formRef,
 }) {
+  const [isMobile, setIsMobile] =
+    useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(
+        window.innerWidth <= 1024
+      );
+    };
+
+    handleResize();
+
+    window.addEventListener(
+      "resize",
+      handleResize
+    );
+
+    return () =>
+      window.removeEventListener(
+        "resize",
+        handleResize
+      );
+  }, []);
+
+  const handleGetLeads = () => {
+    setMenuOpen(false);
+
+    if (formRef?.current) {
+      formRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  };
+
   const styles = {
     navbar: {
       position: "fixed",
@@ -15,21 +51,29 @@ export default function Navbar({
       left: 0,
       width: "100%",
       zIndex: 1000,
-      padding: "15px 40px",
-      background: scrolled
-        ? "rgba(0,0,0,0.75)"
-        : "rgba(255,255,255,0.08)",
-      backdropFilter: "blur(15px)",
-      WebkitBackdropFilter: "blur(15px)",
+
+      padding: isMobile
+        ? "8px 18px"
+        : "8px 32px",
+
+      background:
+        "rgba(10,32,89,0.82)",
+
+      backdropFilter: "blur(14px)",
+      WebkitBackdropFilter:
+        "blur(14px)",
+
       boxSizing: "border-box",
     },
 
     navInner: {
       display: "flex",
-      justifyContent: "space-between",
+      justifyContent:
+        "space-between",
       alignItems: "center",
     },
 
+    /* LOGO */
     logo: {
       display: "flex",
       alignItems: "center",
@@ -37,102 +81,163 @@ export default function Navbar({
     },
 
     logoImg: {
-      width: "65px",
-      height: "65px",
+      width: isMobile
+        ? "80px"
+        : "105px",
+
+      height: "auto",
       objectFit: "contain",
     },
 
     logoText: {
       display: "flex",
       flexDirection: "column",
-      marginLeft: "10px",
+      marginLeft: "8px",
     },
 
     brand: {
       color: "#fff",
-      fontSize: "36px",
+      fontSize: isMobile
+        ? "18px"
+        : "30px",
+
       fontWeight: "700",
       lineHeight: "1",
     },
 
     sub: {
       color: "#ffb400",
-      fontSize: "16px",
+      fontSize: isMobile
+        ? "10px"
+        : "13px",
+
       fontWeight: "600",
       letterSpacing: "2px",
-      marginTop: "2px",
     },
 
-    hamburger: {
-      width: "45px",
-      height: "45px",
-      background: "transparent",
-      border: "none",
+    /* DESKTOP MENU */
+    desktopMenu: {
       display: "flex",
-      flexDirection: "column",
-      justifyContent: "center",
       alignItems: "center",
-      gap: "6px",
-      cursor: "pointer",
-      zIndex: 9999,
+      gap: "24px",
     },
 
-    line: {
-      width: "30px",
-      height: "3px",
-      background: "#fff",
-      borderRadius: "10px",
-      transition: "all 0.3s ease",
-    },
-
-    fullMenu: {
-      position: "fixed",
-      top: 0,
-      right: menuOpen ? "0" : "-100%",
-      width: "100%",
-      height: "100vh",
-      background: "#111",
-      transition: "0.4s ease",
-      zIndex: 999,
-      display: "flex",
-      justifyContent: "center",
-      alignItems: "center",
-    },
-
-    navLinks: {
-      display: "flex",
-      flexDirection: "column",
-      gap: "20px",
-      textAlign: "center",
-    },
-
-    link: {
+    desktopLink: {
       color: "#fff",
       textDecoration: "none",
-      fontSize: "28px",
-      fontWeight: "600",
+      fontSize: "15px",
+      fontWeight: "500",
+      cursor: "pointer",
+      transition: "0.3s",
     },
 
     activeLink: {
       color: "#ffb400",
     },
 
+    /* BUTTON BACK */
     ctaButton: {
-      padding: "14px 30px",
+      padding: "10px 18px",
       border: "none",
       borderRadius: "10px",
       background: "#ffb400",
       color: "#000",
-      fontSize: "18px",
-      fontWeight: "600",
+      fontWeight: "700",
       cursor: "pointer",
-      marginTop: "10px",
+      fontSize: "13px",
+    },
+
+    /* HAMBURGER FIX */
+    hamburger: {
+      width: "50px",
+      height: "50px",
+
+      background:
+        "rgba(33,67,158,0.55)",
+
+      border:
+        "1px solid rgba(255,255,255,0.08)",
+
+      borderRadius: "12px",
+
+      display: "flex",
+      flexDirection: "column",
+
+      justifyContent: "center",
+      alignItems: "center",
+
+      gap: "6px",
+
+      cursor: "pointer",
+    },
+
+    line: {
+      width: "24px",
+      height: "3px",
+      background: "#fff",
+      borderRadius: "10px",
+    },
+
+    /* MOBILE MENU */
+    mobileMenu: {
+      position: "fixed",
+
+      top: "78px",
+
+      right: menuOpen
+        ? "14px"
+        : "-100%",
+
+      width: "52%",
+      height: "52vh",
+
+      borderRadius: "22px",
+
+      background:
+        "rgba(13,42,110,0.98)",
+
+      backdropFilter:
+        "blur(18px)",
+
+      transition:
+        "0.35s ease",
+
+      display: "flex",
+      justifyContent:
+        "center",
+      alignItems: "center",
+
+      zIndex: 999,
+
+      padding: "20px",
+    },
+
+    mobileNav: {
+      display: "flex",
+      flexDirection:
+        "column",
+      gap: "22px",
+      textAlign: "center",
+      width: "100%",
+    },
+
+    mobileLink: {
+      color: "#fff",
+      textDecoration: "none",
+      fontSize: "22px",
+      fontWeight: "600",
     },
   };
 
+  const navItems = [
+    "home",
+    "services",
+    "about",
+    "contact",
+  ];
+
   return (
     <>
-      {/* NAVBAR */}
       <header style={styles.navbar}>
         <div style={styles.navInner}>
           {/* LOGO */}
@@ -144,94 +249,149 @@ export default function Navbar({
               setMenuOpen(false);
             }}
           >
-            <img src={LOGO} alt="Netxye" style={styles.logoImg} />
+            <img
+              src={LOGO}
+              alt="Netxye Logo"
+              style={styles.logoImg}
+            />
 
-            <div style={styles.logoText}>
-              <span style={styles.brand}>Netxye</span>
-              <span style={styles.sub}>AUTOMATION</span>
+            <div
+              style={styles.logoText}
+            >
+              <span
+                style={styles.brand}
+              >
+                Netxye
+              </span>
+
+              <span style={styles.sub}>
+                AUTOMATION
+              </span>
             </div>
           </a>
 
-          {/* HAMBURGER MENU */}
-          <button
-            style={styles.hamburger}
-            onClick={() => setMenuOpen(!menuOpen)}
-            aria-label="Toggle Menu"
-          >
-            <span
-              style={{
-                ...styles.line,
-                transform: menuOpen
-                  ? "translateY(9px) rotate(45deg)"
-                  : "none",
-              }}
-            />
+          {/* DESKTOP MENU */}
+          {!isMobile ? (
+            <div
+              style={
+                styles.desktopMenu
+              }
+            >
+              {navItems.map((item) => (
+                <a
+                  key={item}
+                  href={`#${item}`}
+                  style={{
+                    ...styles.desktopLink,
+                    ...(activeNav ===
+                    item
+                      ? styles.activeLink
+                      : {}),
+                  }}
+                  onClick={(e) =>
+                    scrollTo(e, item)
+                  }
+                >
+                  {item ===
+                  "contact"
+                    ? "Contact Us"
+                    : item
+                        .charAt(0)
+                        .toUpperCase() +
+                      item.slice(1)}
+                </a>
+              ))}
 
-            <span
-              style={{
-                ...styles.line,
-                opacity: menuOpen ? 0 : 1,
-              }}
-            />
-
-            <span
-              style={{
-                ...styles.line,
-                transform: menuOpen
-                  ? "translateY(-9px) rotate(-45deg)"
-                  : "none",
-              }}
-            />
-          </button>
+              {/* BUTTON FIXED */}
+              <button
+                style={
+                  styles.ctaButton
+                }
+                onClick={
+                  handleGetLeads
+                }
+              >
+                Get Leads 🚀
+              </button>
+            </div>
+          ) : (
+            <button
+              style={
+                styles.hamburger
+              }
+              onClick={() =>
+                setMenuOpen(
+                  !menuOpen
+                )
+              }
+            >
+              <span
+                style={
+                  styles.line
+                }
+              />
+              <span
+                style={
+                  styles.line
+                }
+              />
+              <span
+                style={
+                  styles.line
+                }
+              />
+            </button>
+          )}
         </div>
       </header>
 
-      {/* FULL SCREEN MENU */}
-      <div style={styles.fullMenu}>
-        <nav style={styles.navLinks}>
-          {["home", "services", "about", "contact"].map((item) => (
-            <a
-              key={item}
-              href={`#${item}`}
-              style={{
-                ...styles.link,
-                ...(activeNav === item
-                  ? styles.activeLink
-                  : {}),
-              }}
-              onClick={(e) => {
-                scrollTo(e, item);
-                setMenuOpen(false);
-              }}
-            >
-              {item.charAt(0).toUpperCase() + item.slice(1)}
-            </a>
-          ))}
-
-          <button
-            style={styles.ctaButton}
-            onClick={() => {
-              setMenuOpen(false);
-
-              setTimeout(() => {
-                if (formRef?.current) {
-                  formRef.current.scrollIntoView({
-                    behavior: "smooth",
-                    block: "center",
-                  });
-
-                  const input =
-                    formRef.current.querySelector("input");
-
-                  if (input) input.focus();
-                }
-              }, 300);
-            }}
+      {/* MOBILE MENU */}
+      {isMobile && (
+        <div
+          style={
+            styles.mobileMenu
+          }
+        >
+          <nav
+            style={
+              styles.mobileNav
+            }
           >
-            Get Leads 🚀
-          </button>
-        </nav>
-      </div>
+            {navItems.map((item) => (
+              <a
+                key={item}
+                href={`#${item}`}
+                style={
+                  styles.mobileLink
+                }
+                onClick={(e) => {
+                  scrollTo(e, item);
+                  setMenuOpen(false);
+                }}
+              >
+                {item ===
+                "contact"
+                  ? "Contact Us"
+                  : item
+                      .charAt(0)
+                      .toUpperCase() +
+                    item.slice(1)}
+              </a>
+            ))}
+
+            <button
+              style={
+                styles.ctaButton
+              }
+              onClick={
+                handleGetLeads
+              }
+            >
+              Get Leads 🚀
+            </button>
+          </nav>
+        </div>
+      )}
     </>
   );
 }
